@@ -1,7 +1,7 @@
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { mockBookings } from "./mockData";
-import type { Booking } from "./types";
+import type { Booking, BookingStatus } from "./types";
 import "./App.css";
 
 const columns: ColumnsType<Booking> = [
@@ -11,7 +11,11 @@ const columns: ColumnsType<Booking> = [
   { title: "時間", dataIndex: "time" },
   { title: "大人", dataIndex: "adult" },
   { title: "小孩", dataIndex: "kid" },
-  { title: "狀態", dataIndex: "status" },
+  {
+    title: "狀態",
+    dataIndex: "status",
+    render: (status: BookingStatus) => <Tag color={"red"}>{status}</Tag>,
+  },
 ];
 
 function App() {
