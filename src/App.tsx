@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Select, Table, Tag } from "antd";
+import { Select, DatePicker, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { mockBookings } from "./mockData";
 import type { Booking, BookingStatus } from "./types";
+import type { Dayjs } from "dayjs";
 import "./App.css";
 
 const statusMap: Record<BookingStatus, { label: string; color: string }> = {
@@ -14,11 +15,15 @@ const statusMap: Record<BookingStatus, { label: string; color: string }> = {
 
 function App() {
   const [bookings, setBookings] = useState<Booking[]>(mockBookings);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const changeStatus = (id: number, newStatus: BookingStatus) => {
     setBookings(
       bookings.map((b) => (b.id === id ? { ...b, status: newStatus } : b)),
     );
   };
+  const filteredBookings = selectedDate
+    ? bookings.filter((b) => b.date === selectedDate.format("YYYY-MM-DD"))
+    : bookings;
   const columns: ColumnsType<Booking> = [
     { title: "姓名", dataIndex: "name" },
     { title: "電話", dataIndex: "phone" },
@@ -54,7 +59,11 @@ function App() {
     <>
       <div>
         <h1>松風訂位後台管理</h1>
-        <Table dataSource={bookings} columns={columns} rowKey={"id"} />
+        <DatePicker
+          value={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+        />
+        <Table dataSource={filteredBookings} columns={columns} rowKey={"id"} />
       </div>
     </>
   );
