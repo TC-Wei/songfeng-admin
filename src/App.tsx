@@ -48,7 +48,11 @@ function App() {
     { title: "姓名", dataIndex: "name" },
     { title: "電話", dataIndex: "phone" },
     { title: "日期", dataIndex: "date" },
-    { title: "時間", dataIndex: "time" },
+    {
+      title: "時間",
+      dataIndex: "time",
+      render: (time: string) => time.slice(0, 5),
+    },
     { title: "大人", dataIndex: "adult" },
     { title: "小孩", dataIndex: "kid" },
     {
