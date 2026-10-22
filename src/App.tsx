@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select, DatePicker, Table, Tag } from "antd";
+import { Select, DatePicker, Statistic, Table, Tag, Space } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { mockBookings } from "./mockData";
 import type { Booking, BookingStatus } from "./types";
@@ -24,6 +24,15 @@ function App() {
   const filteredBookings = selectedDate
     ? bookings.filter((b) => b.date === selectedDate.format("YYYY-MM-DD"))
     : bookings;
+  const totalGroups = filteredBookings.length;
+  const totalPeople = filteredBookings.reduce(
+    (sum, b) => sum + b.adult + b.kid,
+    0,
+  );
+  const arrivedCount = filteredBookings.filter(
+    (b) => b.status === "arrived",
+  ).length;
+
   const columns: ColumnsType<Booking> = [
     { title: "姓名", dataIndex: "name" },
     { title: "電話", dataIndex: "phone" },
@@ -63,6 +72,11 @@ function App() {
           value={selectedDate}
           onChange={(date) => setSelectedDate(date)}
         />
+        <Space size="large">
+          <Statistic title="訂位組數" value={totalGroups} />
+          <Statistic title="總人數" value={totalPeople} />
+          <Statistic title="已到店" value={arrivedCount} />
+        </Space>
         <Table dataSource={filteredBookings} columns={columns} rowKey={"id"} />
       </div>
     </>
