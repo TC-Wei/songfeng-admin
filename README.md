@@ -1,32 +1,36 @@
-# React + TypeScript + Vite
+# 松風鍋物 訂位管理後台
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+[松風鍋物線上訂位](https://restaurant-reservation-practice.vercel.app) 的配套後台（練習作品），從店家的角度查看與管理訂位。
 
-Currently, two official plugins are available:
+## 功能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 訂位列表：姓名、電話、日期、時段、大人／小孩人數
+- 依日期篩選
+- 當日統計：訂位組數、總人數、已到店人數
+- 訂位狀態以彩色標籤顯示（已預約／已到店／未到／已取消）
 
-## React Compiler
+## 技術
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React + TypeScript + Vite
+- Ant Design（Table、Tag、Select、DatePicker、Statistic）
+- Supabase（PostgreSQL）：用 SQL 建立訂位資料表，開啟 Row Level Security
 
-## Expanding the Oxlint configuration
+## 開發進度
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- [x] 用 TypeScript 定義訂位型別（union type 限制狀態）
+- [x] 從 Supabase 讀取訂位資料
+- [ ] 店家登入（讓電話只有登入後才看得到）
+- [ ] 前台送出的訂位寫入資料庫
+- [ ] 後台修改狀態寫回資料庫
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## 本機執行
+
+1. `npm install`
+2. 在根目錄建立 `.env.local`，填入自己的 Supabase 專案網址和 publishable key：
+
+```
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+3. `npm run dev`
