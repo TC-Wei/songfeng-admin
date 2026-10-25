@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Select, DatePicker, Statistic, Table, Tag, Space } from "antd";
+import { Select, DatePicker, Statistic, Table, Tag, Space, Button } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import type { Session } from "@supabase/supabase-js";
 import { supabase } from "./utils/supabase";
 import type { Booking, BookingStatus } from "./types";
 import type { Dayjs } from "dayjs";
@@ -17,7 +18,11 @@ const statusMap: Record<BookingStatus, { label: string; color: string }> = {
 function App() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
+    if (!session) {
+      return;
+    }
     const fetchBookings = async () => {
       const { data, error } = await supabase.from("bookings").select("*");
       if (error) {
@@ -27,11 +32,20 @@ function App() {
       setBookings(data);
     };
     fetchBookings();
+  }, [session]);
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+    return () => data.subscription.unsubscribe();
   }, []);
   const changeStatus = (id: number, newStatus: BookingStatus) => {
     setBookings(
       bookings.map((b) => (b.id === id ? { ...b, status: newStatus } : b)),
     );
+  };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
   };
   const filteredBookings = selectedDate
     ? bookings.filter((b) => b.date === selectedDate.format("YYYY-MM-DD"))
@@ -80,11 +94,14 @@ function App() {
       ),
     },
   ];
+  if (!session) {
+    return <Login />;
+  }
   return (
     <>
       <div>
-        <Login />
         <h1>松風訂位後台管理</h1>
+
         <DatePicker
           value={selectedDate}
           onChange={(date) => setSelectedDate(date)}
@@ -95,6 +112,7 @@ function App() {
           <Statistic title="已到店" value={arrivedCount} />
         </Space>
         <Table dataSource={filteredBookings} columns={columns} rowKey={"id"} />
+        <Button onClick={handleLogout}>登出</Button>
       </div>
     </>
   );
