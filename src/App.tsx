@@ -4,6 +4,7 @@ import type { ColumnsType } from "antd/es/table";
 import { supabase } from "./utils/supabase";
 import type { Booking, BookingStatus } from "./types";
 import type { Dayjs } from "dayjs";
+import Login from "./Login";
 import "./App.css";
 
 const statusMap: Record<BookingStatus, { label: string; color: string }> = {
@@ -82,6 +83,7 @@ function App() {
   return (
     <>
       <div>
+        <Login />
         <h1>松風訂位後台管理</h1>
         <DatePicker
           value={selectedDate}
