@@ -15,7 +15,6 @@ function Login() {
       console.error(error);
       return;
     }
-    console.log(data);
   };
 
   return (
