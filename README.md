@@ -2,6 +2,8 @@
 
 [松風鍋物線上訂位](https://restaurant-reservation-practice.vercel.app) 的配套後台（練習作品），從店家的角度查看與管理訂位。
 
+[後台線上版](https://songfeng-admin.vercel.app)（需店員帳號登入，可看下方 GIF 示範）
+
 ## 功能
 
 - 訂位列表：姓名、電話、日期、時段、大人／小孩人數
