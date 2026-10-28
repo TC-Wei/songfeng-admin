@@ -39,7 +39,15 @@ function App() {
     });
     return () => data.subscription.unsubscribe();
   }, []);
-  const changeStatus = (id: number, newStatus: BookingStatus) => {
+  const changeStatus = async (id: number, newStatus: BookingStatus) => {
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: newStatus })
+      .eq("id", id);
+    if (error) {
+      console.error(error);
+      return;
+    }
     setBookings(
       bookings.map((b) => (b.id === id ? { ...b, status: newStatus } : b)),
     );
