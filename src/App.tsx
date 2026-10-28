@@ -24,7 +24,11 @@ function App() {
       return;
     }
     const fetchBookings = async () => {
-      const { data, error } = await supabase.from("bookings").select("*");
+      const { data, error } = await supabase
+        .from("bookings")
+        .select("*")
+        .order("date", { ascending: true })
+        .order("time", { ascending: true });
       if (error) {
         console.error(error);
         return;
